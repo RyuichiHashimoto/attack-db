@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+  
+  miter-attack-client:
+    build: 
+     context: .
+     dockerfile: Dockerfile
+
+    volumes:
+      - ../:/home/work
+
+    environment:
+      HOME: "/home/work/"
+
+
+    user: 1000:1000
+
+    restart: always
+    working_dir: /home/work
+    container_name: miter-attack-client
+
+
+    command: sleep 400000
+
+  miter-attack-db:
+    image: mysql:8.0.1
+    container_name: miter-attack-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: miter-attack
+      MYSQL_USER: hashimoto
+      MYSQL_PASSWORD: hashimoto
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+    - ../mysql_server/db/data:/var/lib/mysql
+    - ../mysql_server/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ../mysql_server/db/sql:/docker-entrypoint-initdb.d
+    ports:
+    - 3306:3306
+
+    
+
+
+    
+
+
+
+

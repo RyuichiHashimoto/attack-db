@@ -1,0 +1,7 @@
+.vscode-server/
+.dotnet/
+.viminfo
+known_hosts
+env/credential.env
+mysql_server/db/data/
+.bash_history

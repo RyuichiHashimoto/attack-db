@@ -1,0 +1,5 @@
+[user]
+	email = ryuichi.hashimoto.git@gmail.com
+	name = hashimoto
+[credential]
+	helper = "!f() { /home/work/.vscode-server/bin/e170252f762678dec6ca2cc69aba1570769a5d39/node /tmp/vscode-remote-containers-ba65627c-63cb-432c-b316-84ed15d5627b.js git-credential-helper $*; }; f"
