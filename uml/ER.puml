@@ -1,7 +1,7 @@
 @startuml
 
-entity User {
-  * user_id : INT
+entity tactic {
+  * tactic_id : str
   ---
   user_name : VARCHAR
   email : VARCHAR
