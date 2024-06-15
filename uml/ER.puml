@@ -1,37 +1,68 @@
 @startuml
 
-entity tactic {
-  * tactic_id : str
+entity tactics {
+  * id : STR
   ---
-  user_name : VARCHAR
-  email : VARCHAR
-  password : VARCHAR
+  stix_id : STR
+  name : STR
+  description_en: STR
+  description_jp: STR
+  url: STR
+  created : DATE
+  last_modified : DATE
+  domein: STR
+  version: STR
 }
 
-entity Order {
-  * order_id : INT
+entity tac_tech {
+  * id : STR
   ---
-  order_date : DATE
-  user_id : INT
+  tactic_id: STR
+  technique_id:  STR
 }
 
-entity Product {
-  * product_id : INT
+entity techniques {
+  * id : STR
   ---
-  product_name : VARCHAR
-  price : DECIMAL
+  stix_id : STR
+  name : STR
+  description_en: STR
+  description_jp: STR
+  url: STR
+  created : DATE
+  last_modified : DATE
+  domein: STR
+  version: STR
+  detection: STR
+  ' is_sub_technique: BOOL
+  ' parent_technique:
 }
 
-entity OrderDetail {
-  * order_detail_id : INT
+entity tech_data {
+  * id : STR
   ---
-  order_id : INT
-  product_id : INT
-  quantity : INT
+  tactic_id: STR
+  technique_id:  STR
 }
 
-User ||--o{ Order : places
-Order ||--o{ OrderDetail : contains
-Product ||--o{ OrderDetail : includes
+entity datasources {
+  * id : STR
+  ---
+  name : STR
+  stix_id : STR
+  description_en: STR
+  description_jp: STR
+  platform: STR
+  created : DATE
+  last_modified : DATE
+  version: STR
+}
+
+techniques ||--o{ tac_tech
+tactics ||--o{ tac_tech
+techniques ||--o{ tech_data
+techniques ||--o{ datasources
+
+' techniques || 
 
 @enduml
