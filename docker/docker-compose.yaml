@@ -13,7 +13,7 @@ services:
       HOME: "/home/work/"
 
 
-    user: 1000:1000
+    # user: 1000:1000
 
     restart: always
     working_dir: /home/work
