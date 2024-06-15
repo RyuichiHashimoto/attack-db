@@ -5,3 +5,9 @@ known_hosts
 env/credential.env
 mysql_server/db/data/
 .bash_history
+.cache/
+.local/
+.ipython/
+.stixmarx/stix12011.json
+poetry.lock
+.gitignore
