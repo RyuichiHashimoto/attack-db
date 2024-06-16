@@ -68,19 +68,12 @@ entity datasources {
   url: STR
 }
 
-entity collection {
-  * layer_id : STR
-  ---
-  collectionlayer : STR
-  description_en: STR
-  description_jp: STR
-}
 
-entity data_collection {
+entity collectionlayers {
   * id : INTEGER
   ---
-  layer_id: STR
   datasource_id:  STR
+  collection_layer: STR  
 }
 
 tactics ||--o{ tac_tech
@@ -90,8 +83,7 @@ techniques ||--o{ tac_tech
 techniques ||--o{ tech_data
 datasources ||--o{ tech_data
 
-datasources ||--o{ data_collection
-collection ||--o{ data_collection
+datasources ||--o{ collectionlayers
 
 ' techniques || 
 
