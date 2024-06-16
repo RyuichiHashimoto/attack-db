@@ -11,3 +11,6 @@ mysql_server/db/data/
 .stixmarx/stix12011.json
 poetry.lock
 .gitignore
+.vim/.netrwhist
+.stixmarx/
+*.pyc
