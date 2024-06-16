@@ -91,6 +91,7 @@ techniques ||--o{ tech_data
 datasources ||--o{ tech_data
 
 datasources ||--o{ data_collection
+collection ||--o{ data_collection
 
 ' techniques || 
 
