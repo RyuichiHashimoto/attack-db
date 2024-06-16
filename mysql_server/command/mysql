@@ -1,0 +1,26 @@
+SELECT 
+    t.technique_id,
+    t.name AS technique_name,
+    t.is_sub_technique AS technique_is_sub_technique,
+    t.parent_technique AS technique_parent_technique,
+    tc.name AS tactic_name,
+    ds.datasource_id AS datasource_id,
+    ds.datasource AS datasource,
+    c.collection_layer AS collection_layer
+FROM
+    techniques t
+LEFT JOIN
+    tactech tt ON t.technique_id = tt.technique_id
+LEFT JOIN
+    tactics tc ON tt.tactic_id = tc.tactic_id
+LEFT JOIN
+    techdata td ON t.technique_id = td.technique_id
+LEFT JOIN
+    datasources ds ON td.datasource_id = ds.datasource_id
+LEFT JOIN
+    datacollection c ON ds.datasource_id = c.datasource_id
+
+WHERE
+    c.collection_layer = "HOST"
+    # AND t.is_sub_technique = false
+    "1" = "1"
