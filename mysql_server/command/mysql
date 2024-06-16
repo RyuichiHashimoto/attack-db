@@ -1,14 +1,16 @@
 #  mysql --skip-ssl -h miter-attack-db  -proot miter-attack  --batch --silent  < mysql
+SELECT 'technique_id', 'technique_name', 'tactic_name', 'datasource_id', 'datasource', 'collection_layer', 'URL'
+UNION ALL
 SELECT 
     t.technique_id,
     t.name AS technique_name,
-    t.is_sub_technique AS technique_is_sub_technique,
-    t.parent_technique AS technique_parent_technique,
+    # t.is_sub_technique AS technique_is_sub_technique,
+    # t.parent_technique AS technique_parent_technique,
     tc.name AS tactic_name,
     ds.datasource_id AS datasource_id,
     ds.datasource AS datasource,
-    c.collection_layer AS collection_layer
-    # t.url
+    c.collection_layer AS collection_layer,
+    t.url
 FROM
     techniques t
 LEFT JOIN
@@ -22,9 +24,10 @@ LEFT JOIN
 LEFT JOIN
     datacollection c ON ds.datasource_id = c.datasource_id
 WHERE
+    "1" = "1"
     # c.collection_layer = "HOST"
     # c.collection_layer = "Network"
-    c.collection_layer = "OSINT"
+    AND c.collection_layer in ("HOST", "Network","OSINT")
 
 
     
@@ -35,7 +38,7 @@ WHERE
     AND t.is_sub_technique = false
 INTO
     # OUTFILE '/home/work/mysql_server/command/output1.csv'
-    OUTFILE './output3.tsv'
+    OUTFILE './1_intrusion.csv'
     FIELDS TERMINATED BY ',' 
     ENCLOSED BY '"'
     LINES TERMINATED BY '\n';
