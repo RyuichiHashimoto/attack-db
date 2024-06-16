@@ -15,6 +15,11 @@ services:
 
     # user: 1000:1000
 
+    env_file: 
+      - "../env/env.env"
+      - "../env/credential.env"
+
+
     restart: always
     working_dir: /home/work
     container_name: miter-attack-client
