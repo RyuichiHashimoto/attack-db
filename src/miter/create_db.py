@@ -43,14 +43,50 @@ COLUMN_MAPPING_DATASOURCE = {
     "url": "url"
 }
 
-def load_tactic_as_records(ecxel_path: str) -> list[Record]:
+TACTIC_ORDER_DICT = {
+    "TA0001": 3,    
+    "TA0002": 4,
+    "TA0003": 5,
+    "TA0004": 6,
+    "TA0005": 7,
+    "TA0006": 8,
+    "TA0007": 9,
+    "TA0008": 10,
+    "TA0009": 11,
+    "TA0010": 12,
+    "TA0011": 13,
+    "TA0040": 14,
+    "TA0042": 2,
+    "TA0043": 1,
+}
 
-    df = pl.read_excel(ecxel_path)
+TACTIC_KILLCHAIN_DICT = {
+    "TA0043": "killchain_01",
+    "TA0042": "killchain_02",
+    "TA0001": "killchain_03",
+    "TA0002": "killchain_04",
+    "TA0003": "killchain_05",
+    "TA0004": "killchain_05",
+    "TA0005": "killchain_05",
+    "TA0006": "killchain_06",
+    "TA0007": "killchain_06",
+    "TA0008": "killchain_06",
+    "TA0009": "killchain_06",
+    "TA0010": "killchain_06",
+    "TA0011": "killchain_07",
+    "TA0040": "killchain_07",
+}
+
+def create_tactic_as_records(tactic_ecxel_path: str) -> list[Record]:
+
+    df = pl.read_excel(tactic_ecxel_path)
     df = df.with_columns(pl.Series("description_jp", [None]* len(df)))
+    df = df.with_columns(pl.col("ID").apply(lambda x: TACTIC_ORDER_DICT[x]).alias("sequence")).sort("sequence")
+    df = df.with_columns(pl.col("ID").apply(lambda x: TACTIC_KILLCHAIN_DICT[x]).alias("killchain_id"))
     df = df.rename(COLUMN_MAPPING_TACTICS)
     return df.to_dicts()
 
-def load_teqnique_as_records(ecxel_path: str) -> list[Record]:
+def create_technique_as_records(ecxel_path: str) -> list[Record]:
     df = pl.read_excel(ecxel_path)
     df = df.select(list(COLUMN_MAPPING_TECHNIQUE.keys())).rename(COLUMN_MAPPING_TECHNIQUE)
     df = df.with_columns(pl.Series("description_jp", [None]* len(df)))
@@ -139,6 +175,60 @@ def create_tactic_order():
         {"order": 2, "tactic_id": "TA0042"},
         {"order": 1, "tactic_id": "TA0043"},
     ]
+
+def create_cyberkill_chain_data() -> list[Record]:
+    killchain_stages_with_order = [
+        {
+            "killchain_id": "killchain_01",
+            "phase": "Reconnaissance",
+            "description_en": "Intruder selects target, researches it, and attempts to identify vulnerabilities in the target network.",
+            "description_jp": "侵入者はターゲットを選択し、調査し、ターゲットネットワークの脆弱性を特定しようとします。",
+            "order": 1
+        },
+        {
+            "killchain_id": "killchain_02",
+            "phase": "Weaponization",
+            "description_en": "Intruder creates remote access malware weapon, such as a virus or worm, tailored to one or more vulnerabilities.",
+            "description_jp": "侵入者は、ウイルスやワームなどのリモートアクセスマルウェアを作成し、1つ以上の脆弱性に合わせます。",
+            "order": 2
+        },
+        {
+            "killchain_id": "killchain_03",
+            "phase": "Delivery",
+            "description_en": "Intruder transmits weapon to target (e.g., via e-mail attachments, websites or USB drives).",
+            "description_jp": "侵入者は、武器をターゲットに送信します（例：電子メールの添付ファイル、ウェブサイト、USBドライブなど）。",
+            "order": 3
+        },
+        {
+            "killchain_id": "killchain_04",
+            "phase": "Exploitation",
+            "description_en": "Malware weapon's program code triggers, which takes action on target network to exploit vulnerability.",
+            "description_jp": "マルウェアのプログラムコードがトリガーされ、ターゲットネットワーク上で脆弱性を悪用するためのアクションを実行します。",
+            "order": 4
+        },
+        {
+            "killchain_id": "killchain_05",
+            "phase": "Installation",
+            "description_en": "Malware weapon installs an access point (e.g., 'backdoor') usable by the intruder.",
+            "description_jp": "マルウェアが侵入者が使用できるアクセスポイント（例：「バックドア」）をインストールします。",
+            "order": 5
+        },
+        {
+            "killchain_id": "killchain_06",
+            "phase": "Command and Control",
+            "description_en": "Malware enables intruder to have 'hands on the keyboard' persistent access to the target network.",
+            "description_jp": "マルウェアが侵入者に「キーボード操作」でターゲットネットワークへの持続的なアクセスを可能にします。",
+            "order": 6
+        },
+        {
+            "killchain_id": "killchain_07",
+            "phase": "Actions on Objective",
+            "description_en": "Intruder takes action to achieve their goals, such as data exfiltration, data destruction, or encryption for ransom.",
+            "description_jp": "侵入者は、データの引き出し、データの破壊、または身代金のための暗号化などの目的を達成するために行動を起こします。",
+            "order": 7
+        }
+    ]
+    return killchain_stages_with_order
 
 
 def load_tactic_as_records(ecxel_path: str) -> list[Record]:

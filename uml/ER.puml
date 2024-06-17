@@ -1,24 +1,19 @@
 @startuml
+skinparam linetype ortho
 
 entity tactics {
   * tactic_id : STR
   ---
   stix_id : STR
-  name : STR
+  tactic : STR
   description_en: STR
-  description_jp: STR
+  description_jp: STR <<NULL>>
   url: STR
-  created : DATE
+  created : DATE 
   last_modified : DATE
-  domein: STR
+  domein: STR 
   version: STR
-  order: INTEGER
-}
-
-entity TacticOrders {
-  * tactic_id: STR
-  ---
-  order:  INTEGER
+  order: INTEGER <<UNIQUE>>
 }
 
 
@@ -33,7 +28,7 @@ entity techniques {
   * technique_id : STR
   ---
   stix_id : STR
-  name : STR
+  technique : STR
   description_en: STR
   description_jp: STR
   url: STR
@@ -68,6 +63,14 @@ entity datasources {
   url: STR
 }
 
+entity cyberkillchain {
+  * killchain_id : STR
+  ---
+  order: INTEGER
+  phase = STR
+  description_en = STR
+  description_jp = STR
+}
 
 entity collectionlayers {
   * id : INTEGER
@@ -76,14 +79,15 @@ entity collectionlayers {
   collection_layer: STR  
 }
 
-tactics ||--o{ tac_tech
-tactics ||--|| TacticOrders
+tactics ||--{ tac_tech
 
-techniques ||--o{ tac_tech
-techniques ||--o{ tech_data
-datasources ||--o{ tech_data
+techniques ||--{ tac_tech
+techniques ||--{ tech_data
+datasources ||--{ tech_data
 
-datasources ||--o{ collectionlayers
+datasources ||--{ collectionlayers
+
+cyberkillchain ||--{ tactics
 
 ' techniques || 
 
