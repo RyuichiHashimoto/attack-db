@@ -1,0 +1,9 @@
+SELECT 
+    t.tactic,
+    c.phase AS killchain_phase
+FROM 
+    tactics t
+JOIN 
+    cyberkillchain c ON t.killchain_id = c.killchain_id
+ORDER BY 
+    t.sequence;
