@@ -77,6 +77,36 @@ TACTIC_KILLCHAIN_DICT = {
     "TA0040": "killchain_07",
 }
 
+COLUMN_MAPPING_MITIGATION = {
+    "ID": "mitigation_id",
+    "STIX ID": "mitigation",
+    "name": "description_en",
+    "description": "description_jp",
+    "url": "url",
+    "created": "created",
+    "last modified": "last_modified",
+    "domain": "domain",
+    "version": "version"
+}
+
+def create_mitigation_as_records(mitigation_ecxel_path: str) -> list[Record]:
+    mitigation_df = pl.read_excel(mitigation_ecxel_path)
+    mitigation_df = mitigation_df.select(list(COLUMN_MAPPING_MITIGATION.keys())).rename(COLUMN_MAPPING_MITIGATION)
+    mitigation_df = mitigation_df.with_columns(pl.Series("description_jp", [None]* len(mitigation_df)))
+    mitigation_df = mitigation_df.with_columns([pl.col("created").str.strptime(pl.Date, "%d %B %Y"), pl.col("last_modified").str.strptime(pl.Date, "%d %B %Y")])
+    return mitigation_df.to_dicts()
+
+def create_technique_mitigation_relation_as_records(relation_ecxel_path: str) -> list[Record]:
+    map_replace_map = {"source ID": "mitigation_id", "target ID": 'technique_id'}
+    relation_df = pl.read_excel(relation_ecxel_path)
+    relation_df = relation_df.filter(pl.col("source ID").str.starts_with("M"))
+    relation_df = relation_df.select(list(map_replace_map.keys())).rename(relation_ecxel_path)
+    relation_df.with_columns((pl.arange(1, relation_df.height + 1)).alias("id"))
+    return relation_df.to_dicts()
+     
+
+
+
 def create_tactic_as_records(tactic_ecxel_path: str) -> list[Record]:
 
     df = pl.read_excel(tactic_ecxel_path)
@@ -233,6 +263,7 @@ def create_cyberkill_chain_data() -> list[Record]:
         }
     ]
     return killchain_stages_with_order
+
 
 
 def load_tactic_as_records(ecxel_path: str) -> list[Record]:

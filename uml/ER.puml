@@ -17,7 +17,7 @@ entity tactics {
 }
 
 
-entity tac_tech {
+entity tactech {
   * id : INTEGER
   ---
   tactic_id: STR
@@ -75,26 +75,52 @@ entity cyberkillchain {
   * killchain_id : STR
   ---
   order: INTEGER
-  phase = STR
-  description_en = STR
-  description_jp = STR
+  phase: STR
+  description_en: STR
+  description_jp: STR
 }
 
-entity collectionlayers {
-  * id : INTEGER
+
+entity mitigations {
+  * mitigation_id : STR
   ---
-  datasource_id:  STR
-  collection_layer: STR  
+  mitigation: STR
+  description_en: STR
+  description_jp: STR
+  url: STR
+  created : DATE
+  last_modified : DATE
+  domain: STR
+  version: STR
 }
 
-tactics ||--{ tac_tech
+entity datacollection{
+  * id : INTERGER
+  ---
+  datasource_id: STR
+  collection_layer: CharField()
+}
 
-techniques ||--{ tac_tech
-techniques ||--{ tech_data
-datasources ||--{ tech_data
+entity techmitigations{
+  * id : INTERGER
+  ---
+  mitigation_id: CharField()
+  technique_id: CharField()
+}
 
-datasources ||--{ collectionlayers
+
+tactics ||--{ tactech
+
+techniques ||--{ tactech
+techniques ||--{ techdata
+datasources ||--{ techdata
+
+datasources ||--{ datacollection
 datasources ||--|| additionaldatasources
+
+techniques ||--{ techmitigations
+mitigations ||--{ techmitigations
+
 
 
 cyberkillchain ||--{ tactics

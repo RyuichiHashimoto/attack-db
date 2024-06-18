@@ -96,6 +96,21 @@ class AdditionalDatasources(BaseModel):
     is_target = IntegerField(default=False) # 0 使用しない、１　使用するかも　２　使用する。
     
 
+class Mitigations(BaseModel):
+    mitigation_id = CharField(primary_key=True)
+    mitigation= CharField(null=False)
+    description_en= CharField(null=False)
+    description_jp= CharField(null=True)
+    url= CharField(null=False)
+    created = DateField()
+    last_modified = DateField()
+    domain= CharField(null=False)
+    version= CharField(null=False)
+
+class TechMitigations(BaseModel):
+    id = PrimaryKeyField()
+    mitigation_id = CharField()
+    technique_id = CharField()
 
 
 def update_additonal_data(datasource_id: str, new_value: int)  -> None:

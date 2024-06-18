@@ -1,1 +1,1 @@
-mysqldump --ssl-mode="DISABLED" --single-transaction -h 172.18.0.2  -u hashimoto -phashimoto miter-attack   > $1
+mysqldump --ssl-mode="DISABLED" --single-transaction -h miter-attack-db  -u hashimoto -phashimoto miter-attack   > $1
