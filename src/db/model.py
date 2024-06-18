@@ -16,7 +16,7 @@ class BaseModel(Model):
 class Tactics(BaseModel):
     tactic_id = CharField(primary_key=True, max_length=255)
     stix_id = CharField(null=False)
-    name = CharField(null=False)
+    tactic = CharField(null=False)
     description_en = CharField(null=False)
     description_jp = CharField(null=True)
     url = CharField(null=False)
@@ -24,13 +24,12 @@ class Tactics(BaseModel):
     last_modified = DateField(null=False)
     domain = CharField(null=False)
     version = CharField(null=False)
+    sequence = IntegerField(null=False, unique=True)
+
+    # killchain
+    killchain_id = CharField(max_length=255)
     
-class TacticOrders(BaseModel):
-    tactic_id = CharField(primary_key=True, max_length=255)
-    order = IntegerField()
-
-
-
+    
 # tac_techモデル
 class TacTech(BaseModel):
     id = PrimaryKeyField()
@@ -41,7 +40,7 @@ class TacTech(BaseModel):
 class Techniques(BaseModel):
     technique_id = CharField(primary_key=True, max_length=255)
     stix_id = CharField()
-    name = CharField()
+    technique = CharField()
     description_en = CharField()
     description_jp = CharField(null=True)
     url = CharField()
@@ -59,12 +58,14 @@ class TechData(BaseModel):
     datasource_id = CharField()
     technique_id = CharField()
 
-# # tech_dataモデル
-# class CollectionLayers(BaseModel):
-#     layer_id = CharField(primary_key=True)
-#     collectionlayer = CharField()
-#     description_en = CharField(null=True)
-#     description_jp = CharField(null=True)
+class Cyberkillchain(BaseModel):
+    killchain_id = CharField(primary_key=True, max_length=255)
+    order = IntegerField()
+    phase = CharField()
+    description_en = CharField()
+    description_jp = CharField(null=True)
+
+    
 
 # tac_techモデル
 class DataCollection(BaseModel):
@@ -89,3 +90,17 @@ class Datasources(BaseModel):
     url = CharField(null=True)
 
 
+# datasourcesモデル
+class AdditionalDatasources(BaseModel):
+    datasource_id = CharField(primary_key=True)
+    is_target = IntegerField(default=False) # 0 使用しない、１　使用するかも　２　使用する。
+    
+
+
+
+def update_additonal_data(datasource_id: str, new_value: int)  -> None:
+    if type(new_value) is not int: raise TypeError
+    if type(datasource_id) is not str: raise TypeError
+
+    query = AdditionalDatasources.update(is_target=new_value).where(AdditionalDatasources.datasource_id == datasource_id)
+    query.execute()

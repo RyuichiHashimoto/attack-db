@@ -148,7 +148,11 @@ def create_collection_layer_records(datasource_excel_path: str) -> list[Record]:
     return data
 
 
-
+def create_addditonal_datasource_as_records():
+    pass
+    # datasource_ids = [datasource.datasource_id for datasource in  Datasources.select(Datasources.datasource_id)]
+    # data = [{"datasource_id": datasource_id, "is_target": 0} for datasource_id in datasource_ids]
+    # target_model.insert_many(data).execute()
 
 def load_datasource_as_records(datasource_ecxel_path: str) -> list[Record]:
     dataset_df = pl.read_excel(datasource_ecxel_path)

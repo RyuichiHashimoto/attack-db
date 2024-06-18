@@ -41,7 +41,7 @@ entity techniques {
   parent_technique: STR
 }
 
-entity tech_data {
+entity techdata {
   * id : INTEGER
   ---
   datasource_id: STR
@@ -61,6 +61,14 @@ entity datasources {
   version: STR
   type: STR
   url: STR
+}
+
+entity additionaldatasources {
+  * datasource_id : STR
+  ---
+  ' # 0 使用しない、１　使用するかも　２　使用する。
+  is_target  <<enum>> 
+  
 }
 
 entity cyberkillchain {
@@ -86,6 +94,8 @@ techniques ||--{ tech_data
 datasources ||--{ tech_data
 
 datasources ||--{ collectionlayers
+datasources ||--|| additionaldatasources
+
 
 cyberkillchain ||--{ tactics
 
