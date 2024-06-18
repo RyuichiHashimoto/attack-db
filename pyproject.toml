@@ -13,6 +13,7 @@ peewee = "^3.17.5"
 pymysql = "^1.1.1"
 polars = "^0.20.31"
 xlsx2csv = "^0.8.2"
+mysql-connector-python = "^8.4.0"
 
 
 [tool.poetry.group.dev.dependencies]
