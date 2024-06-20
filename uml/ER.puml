@@ -108,6 +108,15 @@ entity techmitigations{
   technique_id: CharField()
 }
 
+entity detection{
+  * technique_id : STR
+  * datasource_id : STR
+  ---
+  detection_en: STR
+  detection_jp: STR <<NULL>>
+}
+
+
 
 tactics ||--{ tactech
 
@@ -121,6 +130,8 @@ datasources ||--|| additionaldatasources
 techniques ||--{ techmitigations
 mitigations ||--{ techmitigations
 
+techniques ||--{ detection
+datasources ||--{ detection
 
 
 cyberkillchain ||--{ tactics

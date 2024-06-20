@@ -1,4 +1,4 @@
-from peewee import Model, CharField, DateField, BooleanField, MySQLDatabase, PrimaryKeyField, IntegerField
+from peewee import Model, CharField, DateField, BooleanField, MySQLDatabase, PrimaryKeyField, IntegerField, CompositeKey, ForeignKeyField
 from db.db import DB
 
 # 基本モデルクラス
@@ -111,6 +111,15 @@ class TechMitigations(BaseModel):
     id = PrimaryKeyField()
     mitigation_id = CharField()
     technique_id = CharField()
+
+class Detections(BaseModel):
+    technique_id = ForeignKeyField(Techniques)
+    datasource_id = ForeignKeyField(Datasources)
+    detection_en = CharField()
+    detection_jp = CharField(null=True)
+
+    class Meta:
+        primary_key = CompositeKey('technique_id', 'datasource_id')
 
 
 def update_additonal_data(datasource_id: str, new_value: int)  -> None:

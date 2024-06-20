@@ -210,6 +210,24 @@ def create_tactic_order():
         {"order": 1, "tactic_id": "TA0043"},
     ]
 
+def create_datasource_technique_relation(relation_path: str, datasource_path: str):
+    COLUMN_MAPPING_MITIGATION = {
+        "target ID": "technique_id",
+        "ID": "datasource_id",
+        "mapping description": "detection_en",
+    }
+    relation_df = pl.read_excel(relation_path)
+    relation_df = relation_df.filter(pl.col("mapping type")=="detects")
+    datasource_df = pl.read_excel(datasource_path)
+    datasource_df = datasource_df.with_columns(pl.col("name_sub").str.strip_chars())
+
+    df = relation_df.join(datasource_df, how="left", left_on= "source name", right_on="name_sub")
+    df = df.select(list(COLUMN_MAPPING_MITIGATION.keys())).rename(COLUMN_MAPPING_MITIGATION)
+    df = df.with_columns(pl.Series("detection_jp", [None]* len(df))).sort(by=["technique_id", "datasource_id"])
+    return df.to_dicts()
+
+
+
 def create_cyberkill_chain_data() -> list[Record]:
     killchain_stages_with_order = [
         {
