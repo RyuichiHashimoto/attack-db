@@ -14,3 +14,4 @@ poetry.lock
 .vim/.netrwhist
 .stixmarx/
 *.pyc
+.dbclient/
