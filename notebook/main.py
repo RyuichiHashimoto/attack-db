@@ -6,8 +6,10 @@ def load_sql_file(file) -> str:
     with open(file, "r") as fin:
         return fin.read()
     
+db_connection = mysql.connector.connect(**parameter, ssl_disabled=True)
+
 if __name__ == "__main__":
-    db_connection = mysql.connector.connect(**parameter, ssl_disabled=True)
+    
 
     query = load_sql_file("/home/work/mysql_server/command/mysql.sql")
     df = pd.read_sql(query, db_connection)
@@ -20,10 +22,13 @@ if __name__ == "__main__":
         fill_value=0
     )
 
+    print(pivot_table.shape)
     tech_url_dict_query = load_sql_file("/home/work/mysql_server/command/tech_url_dict.sql")
+    db_connection = mysql.connector.connect(**parameter, ssl_disabled=True)
     technique_url_dic = pd.read_sql(tech_url_dict_query, db_connection).set_index("technique")["url"].to_dict()
 
     tac_order_dict = load_sql_file("/home/work/mysql_server/command/tac_order_dict.sql")
+    db_connection = mysql.connector.connect(**parameter, ssl_disabled=True)
     tac_order_dic = pd.read_sql(tac_order_dict, db_connection).set_index("tactic")["sequence"].to_dict()
 
 

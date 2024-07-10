@@ -32,9 +32,10 @@ WHERE
         "Credential Access",
         "Discovery",
         "Lateral Movement",
-        "Collection"
+        "Collection",
+        "Command and Control"
     )
-    # AND tc.tactic in ("Exfiltration", "Command and Control", "Impact")
+    # AND tc.tactic in ("Exfiltration", , "Impact")
     AND t.is_sub_technique = false
 ORDER BY tc.sequence;
 # INTO

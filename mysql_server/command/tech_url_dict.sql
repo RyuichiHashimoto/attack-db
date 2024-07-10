@@ -1,0 +1,1 @@
+SELECT t.technique_id, t.technique, t.url FROM techniques t
