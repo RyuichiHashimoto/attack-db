@@ -1,105 +1,157 @@
 @startuml
 skinparam linetype ortho
 
-entity tactics {
-  * tactic_id : STR
-  ---
-  stix_id : STR
-  tactic : STR
-  description_en: STR
-  description_jp: STR <<NULL>>
-  url: STR
-  created : DATE 
-  last_modified : DATE
-  domein: STR 
-  version: STR
-  order: INTEGER <<UNIQUE>>
+package "tactic" {
+
+  entity tactics {
+    * tactic_id : str
+    ---
+    stix_id : str
+    tactic : str
+    description_en: str
+    description_jp: str <<NULL>>
+    url: str
+    created : DATE 
+    last_modified : DATE
+    domein: str 
+    version: str
+    order: INTEGER <<UNIQUE>>
+  }
+
+  entity cyberkillchain {
+    * killchain_id : str
+    ---
+    order: INTEGER
+    phase: str
+    description_en: str
+    description_jp: str
+  }
+}
+
+package "datasource" {
+  entity datasources {
+    * datasource_id : str
+    ---
+    datasource : str
+    stix_id : str
+    description_en: str
+    description_jp: str
+    platform: str
+    created : DATE
+    last_modified : DATE
+    version: str
+    type: str
+    url: str
+  }
+
+  entity additionaldatasources {
+    * datasource_id : str
+    ---
+    ' # 0 使用しない、１　使用するかも　２　使用する。
+    is_target  <<enum>>   
+  }
+
+  entity datacollection{
+    * id : INTERGER
+    ---
+    datasource_id: str
+    collection_layer: CharField()
+  }
 }
 
 
 entity tactech {
   * id : INTEGER
   ---
-  tactic_id: STR
-  technique_id:  STR
+  tactic_id: str
+  technique_id:  str
 }
 
 entity techniques {
-  * technique_id : STR
+  * technique_id : str
   ---
-  stix_id : STR
-  technique : STR
-  description_en: STR
-  description_jp: STR
-  url: STR
+  stix_id : str
+  technique : str
+  description_en: str
+  description_jp: str
+  url: str
   created : DATE
   last_modified : DATE
-  domain: STR
-  version: STR
-  detection: STR
+  domain: str
+  version: str
+  detection: str
   is_sub_technique: BOOL
-  parent_technique: STR
+  parent_technique: str
 }
 
 entity techdata {
   * id : INTEGER
   ---
-  datasource_id: STR
-  technique_id:  STR
+  datasource_id: str
+  technique_id:  str
 }
 
-entity datasources {
-  * datasource_id : STR
+package "Software Package" {
+  entity Software{
+    software_id: str
+    ---
+    name: str
+    description_en: str
+    description_jp: str
+    url: str
+    created : DATE
+    last_modified : DATE
+    ' domain
+    version: str
+    ' platforms
+    type: str
+  }
+
+  entity SoftwareAlias {
+    id: str
+    ---
+    software_id: str
+    alias_name: str
+  }
+}
+entity SoftTech {
+  * software_id : str
+  * technique_id : str
   ---
-  datasource : STR
-  stix_id : STR
-  description_en: STR
-  description_jp: STR
-  platform: STR
-  created : DATE
-  last_modified : DATE
-  version: STR
-  type: STR
-  url: STR
 }
-
-entity additionaldatasources {
-  * datasource_id : STR
-  ---
-  ' # 0 使用しない、１　使用するかも　２　使用する。
-  is_target  <<enum>> 
-  
-}
-
-entity cyberkillchain {
-  * killchain_id : STR
-  ---
-  order: INTEGER
-  phase: STR
-  description_en: STR
-  description_jp: STR
-}
-
 
 entity mitigations {
-  * mitigation_id : STR
+  * mitigation_id : str
   ---
-  mitigation: STR
-  description_en: STR
-  description_jp: STR
-  url: STR
+  mitigation: str
+  description_en: str
+  description_jp: str
+  url: str
   created : DATE
   last_modified : DATE
-  domain: STR
-  version: STR
+  domain: str
+  version: str
 }
 
-entity datacollection{
-  * id : INTERGER
+entity groups {
+  * group_id: str
   ---
-  datasource_id: STR
-  collection_layer: CharField()
+  + name: str
+  description_en: str
+  description_jp: str
+  url: str
+  created: DATE
+  last_modified : DATE
+  ' domain: STR
+  version: str  
 }
+
+entity group_software{
+  * group_id: str
+  * software_id: str
+  ---
+}
+
 
 entity techmitigations{
   * id : INTERGER
@@ -109,14 +161,21 @@ entity techmitigations{
 }
 
 entity detection{
-  * technique_id : STR
-  * datasource_id : STR
+  * technique_id : str
+  * datasource_id : str
   ---
-  detection_en: STR
-  detection_jp: STR <<NULL>>
+  detection_en: str
+  detection_jp: str <<NULL>>
 }
 
 
+groups ||--{ group_software
+Software ||--{ group_software
+
+Software ||--{ SoftTech
+techniques ||--{ SoftTech
+
+Software ||--{ SoftwareAlias
 
 tactics ||--{ tactech
 
