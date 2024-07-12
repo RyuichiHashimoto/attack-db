@@ -89,6 +89,29 @@ COLUMN_MAPPING_MITIGATION = {
     "version": "version"
 }
 
+COLUMN_MAPPING_GROUPS = {
+    "ID": "group_id",
+    "name": "name",
+    "description": "description_en",
+    # "description_jp": "description_jp",
+    "url": "url",
+    "created": "created",
+    "last modified": "last_modified",
+    "version": "version",
+}
+
+COLUMN_MAPPING_SOFTWARE = {
+    "ID": "software_id",
+    "name": "name",
+    "description": "description_en",
+    # "description_jp": "description_jp",
+    "url": "url",
+    "created": "created",
+    "last modified": "last_modified",
+    "version": "version",
+    "type": "type"
+}
+
 def create_mitigation_as_records(mitigation_ecxel_path: str) -> list[Record]:
     mitigation_df = pl.read_excel(mitigation_ecxel_path)
     mitigation_df = mitigation_df.select(list(COLUMN_MAPPING_MITIGATION.keys())).rename(COLUMN_MAPPING_MITIGATION)
@@ -105,6 +128,11 @@ def create_technique_mitigation_relation_as_records(relation_ecxel_path: str) ->
     return relation_df.to_dicts()
      
 
+def create_group_as_records(group_excel_path: str) -> list[Record]:
+    group_df = pl.read_excel(group_excel_path)
+    group_df = group_df.rename(COLUMN_MAPPING_GROUPS).select(list(COLUMN_MAPPING_GROUPS.values()))
+    group_df = group_df.with_columns(pl.Series("description_jp", [None]* len(group_df)))
+    return group_df.to_dicts()
 
 
 def create_tactic_as_records(tactic_ecxel_path: str) -> list[Record]:
@@ -190,6 +218,12 @@ def load_datasource_as_records(datasource_ecxel_path: str) -> list[Record]:
     dataset_df = dataset_df.with_columns(pl.Series("description_jp", [None]* len(dataset_df)))
 
     return dataset_df.to_dicts()
+
+def create_software_records(software_path: str) -> list[Record]:
+    software_df = pl.read_excel(software_path)
+    software_df = software_df.rename(COLUMN_MAPPING_SOFTWARE).select(list(COLUMN_MAPPING_SOFTWARE.values()))
+    software_df = software_df.with_columns(pl.Series("description_jp", [None]* len(software_df)))
+    return software_df.to_dicts()
 
 
 def create_tactic_order():
@@ -281,6 +315,8 @@ def create_cyberkill_chain_data() -> list[Record]:
         }
     ]
     return killchain_stages_with_order
+
+
 
 
 
