@@ -121,6 +121,41 @@ class Detections(BaseModel):
     class Meta:
         primary_key = CompositeKey('technique_id', 'datasource_id')
 
+class Groups(BaseModel):
+    group_id = CharField(primary_key=True)
+    name = CharField()
+    description_en= CharField(null=False)
+    description_jp= CharField(null=True)
+    url = CharField()
+    created = DateField()
+    last_modified = DateField()
+    version = CharField()
+
+class Software(BaseModel):
+    software_id = CharField(primary_key=True)    
+    name = CharField()
+    description_en= CharField(null=False)
+    description_jp= CharField(null=True)
+    url = CharField()
+    created = DateField()
+    last_modified = DateField()
+    version = CharField()
+    type = CharField()
+
+
+
+
+
+
+class GroupSoftware(BaseModel):
+    group_id = ForeignKeyField(Groups)
+    software_id = ForeignKeyField(Software)
+    
+    class Meta:
+        primary_key = CompositeKey('group_id', 'software_id')
+
+
+
 
 def update_additonal_data(datasource_id: str, new_value: int)  -> None:
     if type(new_value) is not int: raise TypeError
